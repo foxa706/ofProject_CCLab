@@ -6,7 +6,29 @@ void ofApp::setup(){
     
     bTimerReached = false;
     startTime = ofGetElapsedTimeMillis();  // get the start time
-    endTime = (3000); // 5 minutes on the clock!
+    endTime = (3000); //initial time, keep short for tests
+    
+    //not sure what to do here
+//    ofAddListener(faceDetect.faceEvent, this, &ofApp::ifFaceFound);
+    
+    ofTrueTypeFont::setGlobalDpi(72);
+    
+    courierBold14.loadFont("Courier_New_Bold.ttf", 14, true, true);
+    courierBold14.setLineHeight(18.0f);
+    courierBold14.setLetterSpacing(1.037);
+    
+    courierBold30.loadFont("Courier_New_Bold.ttf", 30, true, true);
+    courierBold30.setLineHeight(34.0f);
+    courierBold30.setLetterSpacing(1.035);
+}
+
+//--------------------------------------------------------------
+void ofApp::ifFaceFound(){
+    
+}
+//--------------------------------------------------------------
+void ofApp::ifFaceLost(){
+    
 }
 
 //--------------------------------------------------------------
@@ -46,7 +68,8 @@ void ofApp::draw(){
     if(bTimerReached) {
         ofBackground(ofColor::paleTurquoise);
         ofSetColor(ofColor::orangeRed);
-        ofDrawBitmapString("Stand up!\n\nBreathe in!\n\nGo outside!", (ofGetWidth()-100)/2, (ofGetHeight()/2));
+        ofSetFullscreen(true);
+        courierBold30.drawString("Stand up!\n\nBreathe in!\n\nGo outside!", (ofGetWidth()-100)/2, (ofGetHeight()/2));
         
     }
     
@@ -57,7 +80,7 @@ void ofApp::draw(){
     info += "Percentage: "+ofToString(pct*100, 1)+"%\n";
     info += "\nPress 't' to start a new timer\n";
     ofSetColor(0);
-    ofDrawBitmapString(info, 20, 20);
+    courierBold14.drawString(info, 20, 20);
 
 }
 
@@ -67,8 +90,9 @@ void ofApp::keyPressed(int key){
     if(key == 't') {
         bTimerReached = false;
         startTime = ofGetElapsedTimeMillis();
-        endTime = (300000);
+        endTime = (300000);// 5 minutes on the clock!
         ofBackgroundHex(0xc5c9b2);
+        ofSetFullscreen(false);
     }
 
 }

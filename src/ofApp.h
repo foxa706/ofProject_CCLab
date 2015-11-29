@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ofMain.h"
+//#include "ofEvents.h"
 #include "FaceDetect.h"
 
 
@@ -21,12 +22,21 @@ class ofApp : public ofBaseApp{
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
     
+    
+//        void ofAddListener(FaceDetect);
+
+        void ifFaceFound();
+        void ifFaceLost();
+    
         float startTime; // store when we start time timer
         float endTime; // when do want to stop the timer
     
         bool  bTimerReached; // used as a trigger when we hit the timer
     
+        ofTrueTypeFont  courierBold14;
+        ofTrueTypeFont courierBold30;
+    
+    
     FaceDetect faceDetect;
-//    FaceDetect bool foundFace;
 		
 };

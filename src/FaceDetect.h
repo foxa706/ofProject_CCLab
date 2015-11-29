@@ -13,11 +13,11 @@
 class FaceDetect{
     
 public:
-    void setup();
+    void setup(bool _foundFace);
     void update();
     void draw();
     
-   
+//    static ofEvent <bool> faceEvent;
     
     ofVideoGrabber vidGrabber;//using video from cam
     ofxCvHaarFinder finder;//face tracking
@@ -27,5 +27,5 @@ public:
     float pos1;//keep track of the distance between two face rect points for bool
     float pos2;
     
-     bool foundFace;
+    bool foundFace;
 };

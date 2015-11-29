@@ -6,14 +6,19 @@
 //
 //
 
-#include "FaceDetect.h"
+#include "FaceDetect.h"\
+
+
+//ofEvent<bool> FaceDetect::faceEvent = ofEvent<bool>();
+
 
 //--------------------------------------------------------------
-void FaceDetect::setup(){
+void FaceDetect::setup(bool _foundFace){
     
-    foundFace = false;
+//    foundFace = false;
+    foundFace = _foundFace;
     
-    camWidth 		= 320;	// try to grab at this size.
+    camWidth 		= 320;	// grab at this size
     camHeight 		= 240;
     
     //initiate the video grabber and load the face tracking model file
@@ -48,10 +53,14 @@ void FaceDetect::draw(){
         if (face.width*2>100) {//is there a significant face area?
             foundFace = true;
             cout <<"Face Detected" << endl;
+//            ofNotifyEvent(faceEvent, true);
         }else{
             foundFace = false;
             cout <<"Face Lost" << endl;
+//            ofNotifyEvent(faceEvent, false);
+//        
         }
+        
     }
     
 }
