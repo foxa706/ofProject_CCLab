@@ -14,7 +14,7 @@ void ofApp::setup(){
     //timer biz
     bTimerReached = false;
     startTime = ofGetElapsedTimeMillis();  // get the start time
-    endTime = (3000); //initial time, keep short for tests
+    endTime = (10000); //initial time, keep short for tests
     
     //type setup
     ofTrueTypeFont::setGlobalDpi(72);
@@ -26,7 +26,11 @@ void ofApp::setup(){
     courierBold30.loadFont("Courier_New_Bold.ttf", 30, true, true);
     courierBold30.setLineHeight(34.0f);
     courierBold30.setLetterSpacing(1.035);
-    
+    //load images
+    dog.loadImage("you.jpg");
+    end.loadImage("you.jpg");
+    qm.loadImage("qmark.gif");
+
     // change below for your usb port
     ard.connect("/dev/tty.usbmodem621", 57600);
     
@@ -69,7 +73,7 @@ void ofApp::setupArduino(const int & version) {
     ofLogNotice() << ard.getFirmwareName();
     ofLogNotice() << "firmata v" << ard.getMajorFirmwareVersion() << "." << ard.getMinorFirmwareVersion();
 
-    // attach a servo to a flux pin ~
+    // attach servo to a flux pin ~
     ard.sendServoAttach(9);
     
 }
@@ -82,7 +86,7 @@ void ofApp::updateArduino(){
     
     // only send if the arduino is ready
     if (bSetupArduino) {
-        // do some biz
+
        
     }
     
@@ -93,19 +97,6 @@ void ofApp::draw(){
     if (!bSetupArduino){
         cout << "arduino not ready\n" << endl;
     } else {
-    for(unsigned int i = 0; i < finder.blobs.size(); i++) {
-        ofRectangle face = finder.blobs[i].boundingRect;
-        
-        if (face.width*2>100) {//is there a significant face area?
-            foundFace = true;
-            cout <<"Face Detected" << endl;
-
-        }else{
-            foundFace = false;
-            cout <<"Face Lost" << endl;
-        }
-        
-    }
 
     float barWidth = 500;
     
@@ -130,14 +121,17 @@ void ofApp::draw(){
     // draw the percantage
     ofSetColor(20);
     ofDrawBitmapString(ofToString(pct*100, 0)+"%", ((ofGetWidth()-barWidth)/2)+barWidth+10, (ofGetHeight()/2)+320);
+
     
     // time's up!
     if(bTimerReached) {
-        ofBackground(ofColor::paleTurquoise);
-        ofSetColor(ofColor::orangeRed);
+        ofBackground(ofColor:: lightBlue);
+        dog.draw(0, 0, ofGetWidth(), ofGetHeight()*2);
+        ofSetColor(ofColor::black);
         ofSetFullscreen(true);
         courierBold30.drawString("Stand up!\n\nBreathe in!\n\nGo outside!", (ofGetWidth()-100)/2, (ofGetHeight()/2));
         ard.sendServo(9, 180, false);
+        
         
     }
     
@@ -149,6 +143,21 @@ void ofApp::draw(){
     info += "\nPress 't' to start a new timer\n";
     ofSetColor(0);
     courierBold14.drawString(info, 20, 20);
+    }
+    for(unsigned int i = 0; i < finder.blobs.size(); i++) {
+        ofRectangle face = finder.blobs[i].boundingRect;
+        
+        if (face.width*2>100) {//is there a significant face area?
+            foundFace = true;
+            cout <<"Face Detected" << endl;
+            
+            
+        }else{
+            foundFace = false;
+            cout <<"Face Lost" << endl;
+            qm.draw(ofGetWidth()/2, ofGetHeight()/2);
+        }
+        
     }
 }
 
