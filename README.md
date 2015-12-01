@@ -15,9 +15,9 @@ The Self Control Moniter is an openFrameworks and Arduino application. It uses o
 ![Alt text](https://github.com/foxa706/ofProject_CCLab/blob/master/screenshots/Screen%20Shot%202015-11-28%20at%206.31.04%20PM.png)
 
 ofExamples Referenced:
-  |simpleTimer
-  |firmataExample
-  |opencvHaarFinderExample
+  * simpleTimer
+  * firmataExample
+  * opencvHaarFinderExample
 
 Here's the [youtube link!](https://youtu.be/Qv5rThOap3k)
 
