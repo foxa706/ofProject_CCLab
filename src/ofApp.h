@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 #include "ofxOpenCv.h"
-
+#include "ofEvents.h"
 
 
 class ofApp : public ofBaseApp{
@@ -41,7 +41,18 @@ class ofApp : public ofBaseApp{
 
     
         ofTrueTypeFont  courierBold14;
-        ofTrueTypeFont courierBold30;
+        ofTrueTypeFont  courierBold30;
+    
+        //arduino setup
+        ofArduino	ard;
+        bool		bSetupArduino;			// flag variable for setting up arduino once
+    
+private:
+    
+    void setupArduino(const int & version);
+    void digitalPinChanged(const int & pinNum);
+    void analogPinChanged(const int & pinNum);
+    void updateArduino();
     
     
 		
