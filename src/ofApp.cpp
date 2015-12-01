@@ -26,10 +26,6 @@ void ofApp::setup(){
     courierBold30.loadFont("Courier_New_Bold.ttf", 30, true, true);
     courierBold30.setLineHeight(34.0f);
     courierBold30.setLetterSpacing(1.035);
-    //load images
-    dog.loadImage("you.jpg");
-    end.loadImage("you.jpg");
-    qm.loadImage("qmark.gif");
 
     // change below for your usb port
     ard.connect("/dev/tty.usbmodem621", 57600);
@@ -94,10 +90,27 @@ void ofApp::updateArduino(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+    ofBackground(ofColor:: black);
     if (!bSetupArduino){
         cout << "arduino not ready\n" << endl;
     } else {
-
+        for(unsigned int i = 0; i < finder.blobs.size(); i++) {
+            ofRectangle face = finder.blobs[i].boundingRect;
+            
+            if (face.width*2>100) {//is there a significant face area?
+                foundFace = true;
+                cout <<"Face Detected" << endl;
+                
+                
+            }else{
+                foundFace = false;
+                cout <<"Face Lost" << endl;
+                ofSetColor(ofColor::green);
+                courierBold30.drawString("Where'd ya go?", 155, ofGetHeight()/2+200);
+            }
+            
+        }
+    
     float barWidth = 500;
     
     // update the timer
@@ -108,56 +121,45 @@ void ofApp::draw(){
         ofMessage msg("Time is up");
         ofSendMessage(msg);
     }
-    
+    if (!bTimerReached){
+    courierBold30.drawString("+-+-+-+-+ +-+-+-+\n|t|i|c|k| |t|o|c|\n+-+-+-+-+ +-+-+-+", 135, ofGetHeight()/2-100);
     // background of the progress bar
-    ofSetColor(100);
-    ofRect((ofGetWidth()-barWidth)/2, (ofGetHeight()/2)+300, barWidth, 30);
+    ofSetColor(ofColor::yellowGreen);
+    ofRect((ofGetWidth()-barWidth)/2, (ofGetHeight()/2)+50, barWidth, 30);
     
     // get the percantage of the timer
     float pct = ofMap(timer, 0.0, endTime, 0.0, 1.0, true);
-    ofSetColor(ofColor::orangeRed);
-    ofRect((ofGetWidth()-barWidth)/2, (ofGetHeight()/2)+300, barWidth*pct, 30);
+    ofSetColor(ofColor::green);
+    ofRect((ofGetWidth()-barWidth)/2, (ofGetHeight()/2)+50, barWidth*pct, 30);
     
     // draw the percantage
-    ofSetColor(20);
+    ofSetColor(ofColor::green);
     ofDrawBitmapString(ofToString(pct*100, 0)+"%", ((ofGetWidth()-barWidth)/2)+barWidth+10, (ofGetHeight()/2)+320);
 
-    
+    //    // timer info
+    //    string
+    //    info = "Timer:   "+ofToString(endTime/60000.0, 1)+" minutes\n";
+    //    info += "Time Elapsed:      "+ofToString(timer/60000.0, 1)+" minutes\n";
+    //    info += "Percentage: "+ofToString(pct*100, 1)+"%\n";
+    //    info += "\nPress 't' to start a new timer\n";
+    //    ofSetColor(ofColor::green);
+    //    courierBold14.drawString(info, 20, 20);
+    }
     // time's up!
     if(bTimerReached) {
-        ofBackground(ofColor:: lightBlue);
-        dog.draw(0, 0, ofGetWidth(), ofGetHeight()*2);
-        ofSetColor(ofColor::black);
+        ofBackground(ofColor:: green);
         ofSetFullscreen(true);
-        courierBold30.drawString("Stand up!\n\nBreathe in!\n\nGo outside!", (ofGetWidth()-100)/2, (ofGetHeight()/2));
+        ofSetColor(ofColor::black);
+        courierBold30.drawString(" **********     **     **   ** ********       **    \n/////**///     ****   /**  ** /**/////       ****   \n    /**       **//**  /** **  /**           **//**  \n    /**      **  //** /****   /*******     **  //** \n    /**     **********/**/**  /**////     **********\n    /**    /**//////**/**//** /**        /**//////**\n   /**    /**     /**/** //**/********  /**     /**\n     //     //      // //   // ////////   //      // \n ******   *******   ********     **     **   **\n/*////** /**////** /**/////     ****   /**  ** \n/*   /** /**   /** /**         **//**  /** **  \n/******  /*******  /*******   **  //** /****   \n/*//// **/**///**  /**////   **********/**/**  \n/*    /**/**  //** /**      /**//////**/**//** \n/******* /**   //**/********/**     /**/** //**\n///////  //     // //////// //      // //   // ", 30, 30);//take a break in ascii art
+        
+        courierBold30.drawString("Press 't' for a new timer", 30, 700);
+        
         ard.sendServo(9, 180, false);
         
         
     }
     
-    // timer info
-    string
-    info = "Timer:   "+ofToString(endTime/60000.0, 1)+" minutes\n";
-    info += "Time Elapsed:      "+ofToString(timer/60000.0, 1)+" minutes\n";
-    info += "Percentage: "+ofToString(pct*100, 1)+"%\n";
-    info += "\nPress 't' to start a new timer\n";
-    ofSetColor(0);
-    courierBold14.drawString(info, 20, 20);
-    }
-    for(unsigned int i = 0; i < finder.blobs.size(); i++) {
-        ofRectangle face = finder.blobs[i].boundingRect;
-        
-        if (face.width*2>100) {//is there a significant face area?
-            foundFace = true;
-            cout <<"Face Detected" << endl;
-            
-            
-        }else{
-            foundFace = false;
-            cout <<"Face Lost" << endl;
-            qm.draw(ofGetWidth()/2, ofGetHeight()/2);
-        }
-        
+
     }
 }
 
@@ -168,7 +170,7 @@ void ofApp::keyPressed(int key){
         bTimerReached = false;
         startTime = ofGetElapsedTimeMillis();
         endTime = (300000);// 5 minutes on the clock!
-        ofBackgroundHex(0xc5c9b2);
+        ofBackground(ofColor::black);
         ofSetFullscreen(false);
         ard.sendServo(9, 0, false);
     }

@@ -42,10 +42,6 @@ class ofApp : public ofBaseApp{
     
         ofTrueTypeFont  courierBold14;
         ofTrueTypeFont  courierBold30;
-    
-        ofImage dog;
-        ofImage end;
-        ofImage qm;
 
     
         //arduino setup
