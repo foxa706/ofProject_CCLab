@@ -2,15 +2,21 @@
 
 //--------------------------------------------------------------
 void ofApp::setup(){
-    faceDetect.setup();
+    //facial setup
+    foundFace = false;
+    camWidth 		= 320;	// grab at this size
+    camHeight 		= 240;
     
+    //initiate the video grabber and load the face tracking model file
+    vidGrabber.initGrabber(camWidth,camHeight);
+    finder.setup("haarcascade_frontalface_default.xml");
+
+    //timer biz
     bTimerReached = false;
     startTime = ofGetElapsedTimeMillis();  // get the start time
     endTime = (3000); //initial time, keep short for tests
     
-    //not sure what to do here
-//    ofAddListener(faceDetect.faceEvent, this, &ofApp::ifFaceFound);
-    
+    //type setup
     ofTrueTypeFont::setGlobalDpi(72);
     
     courierBold14.loadFont("Courier_New_Bold.ttf", 14, true, true);
@@ -33,12 +39,30 @@ void ofApp::ifFaceLost(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
-    faceDetect.update();
+    //call an update to get a new frame from the camera
+    vidGrabber.update();
+    
+    //if there is a new frame, look for faces in it.
+    if (vidGrabber.isFrameNew()){
+        finder.findHaarObjects(vidGrabber.getPixelsRef());
+    }
 }
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    faceDetect.draw();
+    for(unsigned int i = 0; i < finder.blobs.size(); i++) {
+        ofRectangle face = finder.blobs[i].boundingRect;
+        
+        if (face.width*2>100) {//is there a significant face area?
+            foundFace = true;
+            cout <<"Face Detected" << endl;
+
+        }else{
+            foundFace = false;
+            cout <<"Face Lost" << endl;
+        }
+        
+    }
 
     float barWidth = 500;
     

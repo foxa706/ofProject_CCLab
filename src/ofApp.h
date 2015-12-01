@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-//#include "ofEvents.h"
-#include "FaceDetect.h"
+#include "ofxOpenCv.h"
+
 
 
 class ofApp : public ofBaseApp{
@@ -33,10 +33,16 @@ class ofApp : public ofBaseApp{
     
         bool  bTimerReached; // used as a trigger when we hit the timer
     
+        ofVideoGrabber vidGrabber;//using video from cam
+        ofxCvHaarFinder finder;//face tracking
+        int camWidth;
+        int camHeight;
+        bool foundFace;
+
+    
         ofTrueTypeFont  courierBold14;
         ofTrueTypeFont courierBold30;
     
     
-    FaceDetect faceDetect;
 		
 };
